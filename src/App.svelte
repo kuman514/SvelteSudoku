@@ -1,4 +1,5 @@
 <script>
+	import BoardLine from './BoardLine.svelte';
 	export let title;
 
 	let board = [
@@ -14,6 +15,18 @@
 	];
 
 	let isLocked = [
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false]
+	];
+
+	let fault = [
 		[false, false, false, false, false, false, false, false, false],
 		[false, false, false, false, false, false, false, false, false],
 		[false, false, false, false, false, false, false, false, false],
@@ -142,14 +155,23 @@
 	}
 
 	initBoard();
+	fault = checkBoard();
 	holeBoard();
 	lockBoard();
-	console.log(board);
 </script>
 
 <main>
 	<h1>{title}</h1>
-
+	<div>
+		{#each board as line, row}
+			<BoardLine
+				boardLine={line}
+				lockedLine={isLocked[row]}
+				faultLine={fault[row]}
+				{row}
+			/>
+		{/each}
+	</div>
 </main>
 
 <style>
@@ -163,7 +185,7 @@
 	h1 {
 		color: #ff3e00;
 		text-transform: uppercase;
-		font-size: 4em;
+		font-size: 3vh;
 		font-weight: 100;
 	}
 
