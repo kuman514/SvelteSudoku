@@ -150,10 +150,38 @@
 		backtrackBoard(0);
 	}
 
-	function holeBoard() {
+	function holeBoard(maxCount) {
+		let count = 0;
+		
+		if (maxCount < 0 || maxCount > 81) {
+			return;
+		}
+
+		while (count < maxCount) {
+			const current = Math.floor(Math.random() * 81);
+			const [curR, curC] = [Math.floor(current / 9), current % 9];
+
+			if (board[curR][curC] === 0) {
+				continue;
+			}
+
+			board[curR][curC] = 0;
+			count++;
+		}
+
+		console.log(board);
 	}
 
 	function lockBoard() {
+		for (let i = 0; i < 9; i++) {
+			for (let j = 0; j < 9; j++) {
+				if (board[i][j] === 0) {
+					continue;
+				}
+
+				isLocked[i][j] = true;
+			}
+		}
 	}
 
 	function onClickButton(row, col) {
@@ -163,7 +191,7 @@
 
 	initBoard();
 	fault = checkBoard();
-	holeBoard();
+	holeBoard(32);
 	lockBoard();
 </script>
 
@@ -171,6 +199,7 @@
 	<h1>{title}</h1>
 	<div
 		on:click={event => {
+			console.dir(event.target);
 			if (event.target.nodeName !== 'BUTTON') {
 				return;
 			}

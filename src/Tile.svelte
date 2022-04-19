@@ -12,13 +12,16 @@
   id={`tile-${row}${col}`}
   class={`${locked ? 'locked' : ''} ${fault ? 'fault' : ''} ${(Math.floor(row / 3) + Math.floor(col / 3)) % 2 === 0 ? 'ordinary' : 'alternative'} ${(selectedRow === row && selectedCol === col) ? 'selected' : ''}` }
 >
-  {(1 <= number && number <= 9) ? number : ' '}
+  {(1 <= number && number <= 9) ? number : '·'}
 </button>
 
 <style>
   button {
     all: unset;
-    font-size: 4vh;
+    width: 4.5vh;
+    height: 4.5vh;
+    font-size: 2.5vh;
+    font-variant-numeric: tabular-nums;
   }
 
   .ordinary {
@@ -39,5 +42,9 @@
 
   .fault {
     color: red;
+  }
+
+  .hidden {
+    opacity: 0;
   }
 </style>
