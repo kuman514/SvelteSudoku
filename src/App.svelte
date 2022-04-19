@@ -1,0 +1,175 @@
+<script>
+	export let title;
+
+	let board = [
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0]
+	];
+
+	let isLocked = [
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false]
+	];
+
+	function checkBoard() {
+		const isFault = [
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false]
+		];
+
+		for (let i = 0; i < 9; i++) {
+			for (let j = 0; j < 9; j++) {
+				// Skip locked
+				if (isLocked[i][j]) {
+					continue;
+				}
+
+				// Across
+				for (let k = 0; k < 9; k++) {
+					if (j === k || board[i][k] === 0) {
+						continue;
+					}
+					if (board[i][k] === board[i][j]) {
+						isFault[i][j] = true;
+					}
+				}
+
+				// Down
+				for (let k = 0; k < 9; k++) {
+					if (i === k || board[k][j] === 0) {
+						continue;
+					}
+					if (board[k][j] === board[i][j]) {
+						isFault[i][j] = true;
+					}
+				}
+
+				// Square
+				const [startR, startC] = [Math.floor(i / 3) * 3, Math.floor(j / 3) * 3];
+				for (let sqi = 0; sqi < 3; sqi++) {
+					for (let sqj = 0; sqj < 3; sqj++) {
+						const [curR, curC] = [startR + sqi, startC + sqj];
+						if ((curR === i && curC === j) || board[curR][curC] === 0) {
+							continue;
+						}
+						if (board[curR][curC] === board[i][j]) {
+							isFault[i][j] = true;
+						}
+					}
+				}
+			}
+		}
+
+		return isFault;
+	}
+
+	function backtrackBoard(current) {
+		const [curR, curC] = [Math.floor(current / 9), current % 9];
+		const rotation = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => (Math.random() - 0.5));
+
+		for (let i = 0; i < 9; i++) {
+			board[curR][curC] = rotation[i];
+
+			let fail = false;
+			const isFault = checkBoard();
+
+			/*
+			let failMap = '';
+			printBoard();
+			for (let y = 0; y < 9 && !fail; y++) {
+				for (let x = 0; x < 9 && !fail; x++) {
+					failMap += (isFault[y][x] ? 'X' : '.');
+				}
+				failMap += '\n';
+			}
+			failMap += '\n';
+			console.log(failMap);
+			*/
+
+			for (let y = 0; y < 9 && !fail; y++) {
+				for (let x = 0; x < 9 && !fail; x++) {
+					if (isFault[y][x]) {
+						fail = true;
+					}
+				}
+			}
+
+			if (fail) {
+				continue;
+			}
+
+			if (current === 80) {
+				return true;
+			} else if (backtrackBoard(current + 1)) {
+				return true;
+			}
+		}
+
+		// If failed, restore
+		board[curR][curC] = 0;
+		return false;
+	}
+
+	function initBoard() {
+		backtrackBoard(0);
+	}
+
+	function holeBoard() {
+	}
+
+	function lockBoard() {
+	}
+
+	initBoard();
+	holeBoard();
+	lockBoard();
+	console.log(board);
+</script>
+
+<main>
+	<h1>{title}</h1>
+
+</main>
+
+<style>
+	main {
+		text-align: center;
+		padding: 1em;
+		max-width: 240px;
+		margin: 0 auto;
+	}
+
+	h1 {
+		color: #ff3e00;
+		text-transform: uppercase;
+		font-size: 4em;
+		font-weight: 100;
+	}
+
+	@media (min-width: 640px) {
+		main {
+			max-width: none;
+		}
+	}
+</style>
