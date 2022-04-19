@@ -4,6 +4,8 @@
   export let lockedLine;
   export let faultLine;
   export let row;
+  export let selectedRow;
+  export let selectedCol;
 </script>
 
 <div>
@@ -14,6 +16,8 @@
       fault={lockedLine[col] ? false : faultLine[col]}
       {row}
       {col}
+      {selectedRow}
+      {selectedCol}
     />
   {/each}
 </div>

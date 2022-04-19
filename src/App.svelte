@@ -38,6 +38,8 @@
 		[false, false, false, false, false, false, false, false, false]
 	];
 
+	let [selectedRow, selectedCol] = [-1, -1];
+
 	function checkBoard() {
 		const isFault = [
 			[false, false, false, false, false, false, false, false, false],
@@ -154,6 +156,11 @@
 	function lockBoard() {
 	}
 
+	function onClickButton(row, col) {
+		console.log(row, col);
+		[selectedRow, selectedCol] = [row, col];
+	}
+
 	initBoard();
 	fault = checkBoard();
 	holeBoard();
@@ -162,13 +169,26 @@
 
 <main>
 	<h1>{title}</h1>
-	<div>
+	<div
+		on:click={event => {
+			if (event.target.nodeName !== 'BUTTON') {
+				return;
+			}
+			const [row, col] = Array.from(event.target.id.split('-')[1]).map(item => parseInt(item));
+			if (row < 0 || row >= 9 || col < 0 || col >= 9) {
+				return;
+			}
+			onClickButton(row, col);
+		}}
+	>
 		{#each board as line, row}
 			<BoardLine
 				boardLine={line}
 				lockedLine={isLocked[row]}
 				faultLine={fault[row]}
 				{row}
+				{selectedRow}
+				{selectedCol}
 			/>
 		{/each}
 	</div>
