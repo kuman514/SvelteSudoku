@@ -20,6 +20,8 @@
     all: unset;
     width: 4.5vh;
     height: 4.5vh;
+    max-width: 9vw;
+    max-height: 9vw;
     font-size: 2.5vh;
     font-variant-numeric: tabular-nums;
   }

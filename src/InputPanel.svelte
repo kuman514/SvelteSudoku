@@ -5,7 +5,7 @@
 </script>
 
 <div>
-  <div>
+  <div class="status">
     {#if (selectedRow < 0 || selectedRow >= 9 || selectedCol < 0 || selectedCol >= 9)}
       Not Selected
     {:else if locked}
@@ -15,7 +15,21 @@
     {/if}
   </div>
   <div>
-    {#each [1, 2, 3, 4, 5, 6, 7, 8, 9] as num}
+    {#each [1, 2, 3] as num}
+      <button id={`digitButton-${num}`}>
+        {num}
+      </button>
+    {/each}
+  </div>
+  <div>
+    {#each [4, 5, 6] as num}
+      <button id={`digitButton-${num}`}>
+        {num}
+      </button>
+    {/each}
+  </div>
+  <div>
+    {#each [7, 8, 9] as num}
       <button id={`digitButton-${num}`}>
         {num}
       </button>
@@ -27,3 +41,25 @@
     </button>
   </div>
 </div>
+
+<style>
+  button {
+    all: unset;
+    width: 4.5vh;
+    height: 4.5vh;
+    max-width: 9vw;
+    max-height: 9vw;
+    font-size: 2.5vh;
+    font-variant-numeric: tabular-nums;
+    background-color: #fcebc0;
+  }
+
+  .status {
+    font-size: 2.5vh;
+  }
+
+  #digitButton-0 {
+    width: 13.5vh;
+    max-width: 27vw;
+  }
+</style>
