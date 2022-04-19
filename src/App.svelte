@@ -1,5 +1,7 @@
 <script>
 	import BoardLine from './BoardLine.svelte';
+	import InputPanel from './InputPanel.svelte';
+
 	export let title;
 
 	let board = [
@@ -169,7 +171,7 @@
 			count++;
 		}
 
-		console.log(board);
+		//console.log(board);
 	}
 
 	function lockBoard() {
@@ -185,7 +187,7 @@
 	}
 
 	function onClickButton(row, col) {
-		console.log(row, col);
+		//console.log(row, col);
 		[selectedRow, selectedCol] = [row, col];
 	}
 
@@ -199,7 +201,7 @@
 	<h1>{title}</h1>
 	<div
 		on:click={event => {
-			console.dir(event.target);
+			//console.dir(event.target);
 			if (event.target.nodeName !== 'BUTTON') {
 				return;
 			}
@@ -220,6 +222,25 @@
 				{selectedCol}
 			/>
 		{/each}
+	</div>
+	<div
+		on:click={event => {
+			if (event.target.nodeName !== 'BUTTON') {
+				return;
+			}
+			if (selectedRow < 0 || selectedRow >= 9 || selectedCol < 0 || selectedCol >= 9) {
+				return;
+			}
+			const value = parseInt(event.target.id.split('-')[1]);
+			board[selectedRow][selectedCol] = value;
+			fault = checkBoard();
+		}}
+	>
+		<InputPanel
+			{selectedRow}
+			{selectedCol}
+			locked={(selectedRow < 0 || selectedRow >= 9 || selectedCol < 0 || selectedCol >= 9) ? false : isLocked[selectedRow][selectedCol]}
+		/>
 	</div>
 </main>
 
