@@ -2,11 +2,14 @@
   export let selectedRow;
   export let selectedCol;
   export let locked;
+  export let complete;
 </script>
 
 <div>
   <div class="status">
-    {#if (selectedRow < 0 || selectedRow >= 9 || selectedCol < 0 || selectedCol >= 9)}
+    {#if complete}
+      Sudoku Completed!
+    {:else if (selectedRow < 0 || selectedRow >= 9 || selectedCol < 0 || selectedCol >= 9)}
       Not Selected
     {:else if locked}
       A Fixed Number
@@ -16,27 +19,39 @@
   </div>
   <div>
     {#each [1, 2, 3] as num}
-      <button id={`digitButton-${num}`}>
+      <button
+        id={`digitButton-${num}`}
+        disabled={complete}
+      >
         {num}
       </button>
     {/each}
   </div>
   <div>
     {#each [4, 5, 6] as num}
-      <button id={`digitButton-${num}`}>
+      <button
+        id={`digitButton-${num}`}
+        disabled={complete}
+      >
         {num}
       </button>
     {/each}
   </div>
   <div>
     {#each [7, 8, 9] as num}
-      <button id={`digitButton-${num}`}>
+      <button
+        id={`digitButton-${num}`}
+        disabled={complete}
+      >
         {num}
       </button>
     {/each}
   </div>
   <div>
-    <button id="digitButton-0">
+    <button
+      id="digitButton-0"
+      disabled={complete}
+    >
       Erase
     </button>
   </div>

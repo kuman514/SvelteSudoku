@@ -42,6 +42,8 @@
 
 	let [selectedRow, selectedCol] = [-1, -1];
 
+	let complete = false;
+
 	function checkBoard() {
 		const isFault = [
 			[false, false, false, false, false, false, false, false, false],
@@ -191,6 +193,17 @@
 		[selectedRow, selectedCol] = [row, col];
 	}
 
+	function checkComplete() {
+		for (let i = 0; i < 9; i++) {
+			for (let j = 0; j < 9; j++) {
+				if (board[i][j] === 0 || fault[i][j]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	initBoard();
 	fault = checkBoard();
 	holeBoard(32);
@@ -234,9 +247,11 @@
 			const value = parseInt(event.target.id.split('-')[1]);
 			board[selectedRow][selectedCol] = value;
 			fault = checkBoard();
+			complete = checkComplete();
 		}}
 	>
 		<InputPanel
+			{complete}
 			{selectedRow}
 			{selectedCol}
 			locked={(selectedRow < 0 || selectedRow >= 9 || selectedCol < 0 || selectedCol >= 9) ? false : isLocked[selectedRow][selectedCol]}
