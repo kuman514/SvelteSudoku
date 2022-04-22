@@ -188,9 +188,24 @@
 		}
 	}
 
-	function onClickButton(row, col) {
+	function moveCursor(row, col) {
 		//console.log(row, col);
+		if (row < 0 || row >= 9 || col < 0 || col >= 9) {
+			return;
+		}
 		[selectedRow, selectedCol] = [row, col];
+	}
+
+	function setValue(row, col, value) {
+		if (row < 0 || row >= 9 || col < 0 || col >= 9) {
+			return;
+		}
+		if (value < 0 || value > 9) {
+			return;
+		}
+		board[row][col] = value;
+		fault = checkBoard();
+		complete = checkComplete();
 	}
 
 	function checkComplete() {
@@ -210,6 +225,32 @@
 	lockBoard();
 </script>
 
+
+<svelte:window
+	on:keydown={event => {
+		//console.log(event.key);
+		let newRow = (0 <= selectedRow && selectedRow < 9) ? selectedRow : 4;
+		let newCol = (0 <= selectedCol && selectedCol < 9) ? selectedCol : 4;
+		switch (event.key) {
+			case 'ArrowUp':
+				moveCursor((9 + newRow - 1) % 9, newCol);
+				break;
+			case 'ArrowDown':
+				moveCursor((newRow + 1) % 9, newCol);
+				break;
+			case 'ArrowLeft':
+				moveCursor(newRow, (9 + newCol - 1) % 9);
+				break;
+			case 'ArrowRight':
+				moveCursor(newRow, (newCol + 1) % 9);
+				break;
+			case '1': case '2': case '3': case '4': case '5':
+			case '6': case '7': case '8': case '9': case '0':
+				setValue(selectedRow, selectedCol, parseInt(event.key));
+				break;
+		}
+	}}
+/>
 <main>
 	<h1>{title}</h1>
 	<div
@@ -222,7 +263,7 @@
 			if (row < 0 || row >= 9 || col < 0 || col >= 9) {
 				return;
 			}
-			onClickButton(row, col);
+			moveCursor(row, col);
 		}}
 	>
 		{#each board as line, row}
@@ -245,9 +286,7 @@
 				return;
 			}
 			const value = parseInt(event.target.id.split('-')[1]);
-			board[selectedRow][selectedCol] = value;
-			fault = checkBoard();
-			complete = checkComplete();
+			setValue(selectedRow, selectedCol, value);
 		}}
 	>
 		<InputPanel
