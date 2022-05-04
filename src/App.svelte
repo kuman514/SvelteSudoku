@@ -1,8 +1,11 @@
 <script>
 	import BoardLine from './BoardLine.svelte';
 	import InputPanel from './InputPanel.svelte';
+	import Difficulty from './Difficulty.svelte';
 
 	export let title;
+
+	const difficulty = [14, 32, 50];
 
 	let board = [
 		[0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -40,7 +43,7 @@
 		[false, false, false, false, false, false, false, false, false]
 	];
 
-	let [selectedRow, selectedCol] = [-1, -1];
+	let [selectedRow, selectedCol] = [4, 4];
 
 	let complete = false;
 
@@ -219,10 +222,51 @@
 		return true;
 	}
 
-	initBoard();
-	fault = checkBoard();
-	holeBoard(32);
-	lockBoard();
+	function initGame(holes) {
+		board = [
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0]
+		];
+
+		isLocked = [
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false]
+		];
+		fault = [
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false],
+			[false, false, false, false, false, false, false, false, false]
+		];
+		[selectedRow, selectedCol] = [4, 4];
+		complete = false;
+
+		initBoard();
+		fault = checkBoard();
+		holeBoard(holes);
+		lockBoard();
+	}
+
+	initGame(32);
 </script>
 
 
@@ -253,6 +297,21 @@
 />
 <main>
 	<h1>{title}</h1>
+	<div
+		on:click={event => {
+			if (event.target.nodeName !== 'BUTTON') {
+				return;
+			}
+			const newDifficulty = parseInt(event.target.id.split('hole')[1]);
+			initGame(newDifficulty);
+		}}
+	>
+		{#each difficulty as holes}
+			<Difficulty
+				{holes}
+			/>
+		{/each}
+	</div>
 	<div
 		on:click={event => {
 			//console.dir(event.target);
