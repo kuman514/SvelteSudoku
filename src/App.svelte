@@ -206,6 +206,9 @@
 		if (value < 0 || value > 9) {
 			return;
 		}
+		if (isLocked[row][col]) {
+			return;
+		}
 		board[row][col] = value;
 		fault = checkBoard();
 		complete = checkComplete();
