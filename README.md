@@ -1,6 +1,6 @@
 # SvelteSudoku
-Svelte를 이용하여 만든 3*3 스도쿠 앱.   
-[앱 사용해보기](https://kuman514.github.io/SvelteSudoku/)
+Svelte를 이용하여 만든 3*3 스도쿠 앱.
+현재 운영이 종료되어, 더 이상 사용할 수 없습니다.
 
 # How to play (게임 방법)
 - 무작위로 생성되고 32개의 구멍으로 이루어진 스도쿠 판을 1~9의 숫자로 채워넣습니다
